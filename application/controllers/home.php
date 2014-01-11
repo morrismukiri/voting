@@ -50,6 +50,7 @@ class home extends CI_Controller {
              $this->load->view('confirm_vote_view');    
             
         } elseif ($this->input->post('phone') && $this->input->post('confirmationcode')) {
+           $this->form_validation->set_rules('phone', 'Phone No.', 'required|trim|callback_number_check');
             $this->form_validation->set_rules('confirmationcode', 'Confirmation Code', 'required|trim|callback_assert_confirmation');
             if ($this->form_validation->run()) {
                 $num=$this->input->post('phone');
