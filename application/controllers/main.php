@@ -63,6 +63,14 @@ class main extends CI_Controller {
         $output = $crud->render();
         $this->load->view('main_view', $output);
     }
+    function students(){
+         $crud = new grocery_CRUD();
+           $crud->set_theme('twitter-bootstrap');
+//        $crud->set_subject('Student');
+//        $crud->set_table('students');
+         $output = $crud->render();
+        $this->load->view('main_view', $output);    
+    }
     
 
 }

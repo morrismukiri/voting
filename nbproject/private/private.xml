@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/D:/Projects/Dropbox/www/votingsys/application/config/config.php</file>
-        <file>file:/D:/Projects/Dropbox/www/votingsys/application/controllers/main.php</file>
-        <file>file:/D:/Projects/Dropbox/www/votingsys/application/views/main_view.php</file>
-        <file>file:/D:/Projects/Dropbox/www/votingsys/application/controllers/main2.php</file>
-        <file>file:/D:/Projects/Dropbox/www/votingsys/application/config/flexi_auth.php</file>
-        <file>file:/D:/Projects/Dropbox/www/votingsys/styles/main.css</file>
-        <file>file:/D:/Projects/Dropbox/www/votingsys/application/views/includes/topbar.php</file>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group/>
     </open-files>
 </project-private>

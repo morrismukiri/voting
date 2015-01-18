@@ -134,8 +134,8 @@ class AfricasTalkingGateway
   protected function execute ($verb_)
   {
     $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_PROXY, '192.168.0.1');
-//        curl_setopt($ch, CURLOPT_PROXYPORT, '8080');
+        curl_setopt($ch, CURLOPT_PROXY, '192.168.0.1');
+        curl_setopt($ch, CURLOPT_PROXYPORT, '8080');
     try {
       switch (strtoupper($verb_)){
       case 'GET':

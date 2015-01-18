@@ -45,7 +45,7 @@ class home extends CI_Controller {
                     'confirmation_code' => $randomcode
                 );
                 $this->common_model->update_record('voters', $updata, 'phone', set_value('phone'));
-                //$this->common_model->send_sms(set_value('phone'), 'your confirmation code to vote is: ' . $randomcode);
+                $this->common_model->send_sms(set_value('phone'), 'your confirmation code to vote is: ' . $randomcode);
             }  
              $this->load->view('confirm_vote_view');    
             
