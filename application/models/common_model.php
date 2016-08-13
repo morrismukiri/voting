@@ -58,8 +58,13 @@ class common_model extends CI_Model {
 
     function send_sms($recipients, $message) {
 //$this->load->add_package_path(APPPATH.'third_party/AfricasTalking/');
-        $this->load->library('AfricasTalkingGateway');
-        $gateway = new AfricaStalkingGateway();
+
+
+        $username = "morrismukiri";
+        $apiKey_ = "7fc06e4ae63d1f55b29b91325f520d54aaec08798d2cdcdb5e7ea435c72a4262";
+         $params = array(1=>$username,2=>$apiKey_);
+                $this->load->library('AfricasTalkingGateway',compact('username','apiKey_'));
+        $gateway = new AfricaStalkingGateway($username, $apiKey_);
         $results = $gateway->sendMessage($recipients, $message);
         $out = "";
         if (count($results)) {
