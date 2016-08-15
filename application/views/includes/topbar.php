@@ -14,6 +14,7 @@
                     <li><a href="<?php echo base_url('main/candidates'); ?>">Candidates</a></li>
                     <li><a href="<?php echo base_url('main/voters'); ?>">Voters</a></li>
                     <li><a href="<?php echo base_url('main/parties'); ?>">Parties</a></li>
+                    <li><a href="<?php echo base_url('main/positions'); ?>">Positions</a></li>
 
                 </ul>
                 <div class="pull-right">
