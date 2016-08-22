@@ -1,13 +1,11 @@
 <html>
     <head>
-        <meta name="title" content="Human Resource and Payroll Management for Growing Business"/>
-        <meta name="description" content="Easy, cheap online Payroll and Human Resource Management System" />
-        <meta name="keywords" content="Lipo,Human Resource, payroll, Management, system,from Kenya, Kenyan, in Kenya, Small,Small Business, cheap, price, basic, premium, online, easy, simple,kra, tax, returns, NHIF, NSSF, Employees,Wrorks on All Devices,Leave management, employee self service,payroll processing, Training management, Appraisals & performance, payroll processing, Recruitment Management, Centralized employee data, Attendance, Organization charting, Files Sharing, Communications & Alerts,Secure,Support,        LipoHR, Lipo HR, Lipo Human Resource, LipoHR Kenya ,Lipo Human Resource Kenya ,Human Resource Software ,Human Resource System , Kenyan Human Resource ,Software made in Kenya ,Payroll System, Kra Reports,payroll Processing Kenya, kra online, returns,returns Kenya, cheap payroll">
-        <link rel="shortcut icon" href="<?php echo base_url(); ?>img/favicon.ico" type="image/x-icon">
+               <link rel="shortcut icon" href="<?php echo base_url(); ?>img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="<?php echo base_url(); ?>img/favicon.ico" sizes="16x16"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo isset($title) ? $title : 'Votes Analysis' ?><?php echo isset($name) ? ' : ' . $name : '' ?></title>
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.theme-united.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap-responsive.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/main.css" />
         <link href='//fonts.googleapis.com/css?family=Roboto:400,300,400italic,500,700,100' rel='stylesheet' type='text/css'>
@@ -39,7 +37,8 @@
             }
 
         </style>
-
+<script src="<?php echo base_url().'assets/morris.js/morris.min.js' ?>"></script>
+            <script src="<?php echo base_url().'assets/morris.js/raphael-2.1.0.min.js' ?>"></script>
     </head>
     <body>     
         <?php
@@ -57,29 +56,15 @@
             <div class="nav">
                 <a class="btn btn-info btn-large" href="<?php echo base_url('home/vote') ?>"><i class="icon-ok-circle icon-white glyphicon"></i> Vote</a>
             </div>
-            <div id="donut"></div>
-            <script src="<?php echo base_url().'assets/morris.js/morris.min.js' ?>"></script>
-            <script src="<?php echo base_url().'assets/morris.js/raphael-2.1.0.min.js' ?>"></script>
-            <script type="text/javascript">
-                Morris.Donut({
-                    element: 'donut',
-                    data: [
-                         <?php
-                    if (isset($votes)) {
-                        foreach ($votes as $vote) {
-                             echo "{label: '$vote->candidate_name', value:$vote->votes_count},"; 
-                        }
-                    }
-                    ?>
-//                        {label: "Download Sales", value: 12},
-//                        {label: "In-Store Sales", value: 30},
-//                        {label: "Mail-Order Sales", value: 20}
-                    ]
-                    
-                });
-
-            </script>
-            <table class="table table-striped">
+            <?php 
+            foreach ($positions as $position) {
+               
+           
+            ?>
+            <legend><?php echo $position->position_name ?> </legend>
+            <div class="row">
+            <div class="span4">
+                <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Candidate</th><th>Votes</th>
@@ -89,16 +74,73 @@
                     <?php
                     if (isset($votes)) {
                         foreach ($votes as $vote) {
+                            // echo json_encode($vote);
+                            
+                            if($vote->position_id == $position->position_id){
                             ?>
                             <tr>
                                 <?php echo "<td>$vote->candidate_name</td><td>$vote->votes_count</td>"; ?>
                             </tr>
                             <?php
+
                         }
+                    }
                     }
                     ?>
                 </tbody>
             </table>
+            </div>
+                <div class="span4">
+                    <div id="donut-<?php echo $position->position_id ?>"></div>
+                </div> 
+                <div class="span4">
+                    <div id="graph-<?php echo $position->position_id ?>"></div>
+                </div>
+            
+            
+            
+            
+            <script type="text/javascript">
+                Morris.Donut({
+                    element: 'donut-<?php echo $position->position_id ?>',
+                    data: [
+                         <?php
+                    if (isset($votes)) {
+                        foreach ($votes as $vote) {
+                            if($vote->position_id== $position->position_id){
+                             echo "{label: '$vote->candidate_name', value:$vote->votes_count},"; 
+                        }
+                    }
+                }
+                    ?>
+                    ]
+                    
+                });
+Morris.Bar({
+  element: 'graph-<?php echo $position->position_id ?>',
+   data: [
+                         <?php
+                    if (isset($votes)) {
+                        foreach ($votes as $vote) {
+                            if($vote->position_id== $position->position_id){
+
+                             echo "{x: '$vote->candidate_name', y:$vote->votes_count},"; 
+                        }
+                    }
+                    }
+                    ?>
+  ],
+  xkey: 'x',
+  ykeys: ['y'],
+  labels: ['Votes']
+});
+
+            </script>
+            </div>
+            <?php 
+        }
+        ?>
+            
 
             <div id = "scripts">
                 <script type = "text/javascript" src = "<?php echo base_url(); ?>scripts/bootstrap.min.js"></script>

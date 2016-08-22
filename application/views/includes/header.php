@@ -11,6 +11,7 @@
             <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
         <?php endforeach; endif; ?>
         <link type="text/css" rel="stylesheet" href="<?php echo base_url() . 'styles/bootstrap-fileupload.min.css'; ?>" />
+        <link type="text/css" rel="stylesheet" href="<?php echo base_url() . 'styles/bootstrap.theme.min.css'; ?>" />
         <script type="text/javascript" src="<?php echo base_url() . 'scripts/bootstrap-fileupload.min.js'; ?>"></script>
         <?php if(isset($js_files)): foreach ($js_files as $file): ?>
             <script src="<?php echo $file; ?>"></script>

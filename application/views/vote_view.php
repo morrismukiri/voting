@@ -1,14 +1,19 @@
+<?php
+// header('');
+// echo json_encode($candidates);
+                        // die();
+
+                  
+ ?>
 <html>
     <head>
-        <meta name="title" content="Human Resource and Payroll Management for Growing Business"/>
-        <meta name="description" content="Easy, cheap online Payroll and Human Resource Management System" />
-        <meta name="keywords" content="Lipo,Human Resource, payroll, Management, system,from Kenya, Kenyan, in Kenya, Small,Small Business, cheap, price, basic, premium, online, easy, simple,kra, tax, returns, NHIF, NSSF, Employees,Wrorks on All Devices,Leave management, employee self service,payroll processing, Training management, Appraisals & performance, payroll processing, Recruitment Management, Centralized employee data, Attendance, Organization charting, Files Sharing, Communications & Alerts,Secure,Support,        LipoHR, Lipo HR, Lipo Human Resource, LipoHR Kenya ,Lipo Human Resource Kenya ,Human Resource Software ,Human Resource System , Kenyan Human Resource ,Software made in Kenya ,Payroll System, Kra Reports,payroll Processing Kenya, kra online, returns,returns Kenya, cheap payroll">
-        <link rel="shortcut icon" href="<?php echo base_url(); ?>img/favicon.ico" type="image/x-icon">
+         <link rel="shortcut icon" href="<?php echo base_url(); ?>img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="<?php echo base_url(); ?>img/favicon.ico" sizes="16x16"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo isset($title) ? $title : 'Vote' ?><?php echo isset($name) ? ' : ' . $name : '' ?></title>
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.theme.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/main.css" />
         <link href='//fonts.googleapis.com/css?family=Roboto:400,300,400italic,500,700,100' rel='stylesheet' type='text/css'>
         <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
@@ -60,25 +65,87 @@
             </div>
             <?php
             if (isset($hasvoted) && $hasvoted) {
-                echo '<h2>Congratulations for voting!</h2>';
+                echo '<h2>Congratulations! Your vote has been counted</h2>';
             } else {
                 if (isset($candidates) && $candidates <> NULL) {
+
                     ?>
-            <table class="table table-bordered">
+        <!-- <table class="table table-bordered">
                         <tr><th>Name</th><th>Party</th></tr>
-                        <?php
-                        foreach ($candidates as $candidate) {
-                            $photosrc = base_url() . 'uploads/' . $candidate->candidate_photo;
-                            $party_symbol = base_url() . 'uploads/' . $candidate->party_symbol;
-                            echo "<tr><td><a href='" . base_url() . "home/cast/$candidate->candidate_id/$voter->voter_id' ><strong>$candidate->candidate_name</strong><br/><img  src='$photosrc'/></a></td><td><strong>$candidate->party_initials<strong><br/><img  src='$party_symbol'/></td></tr>";
-                        }
-                        ?>
-                    </table>
+                        -->
+                         <?php
+            //                   foreach ($candidates as $candidate) {
+            //                 $photosrc = base_url() . 'uploads/' . $candidate->candidate_photo;
+            //                 $party_symbol = base_url() . 'uploads/' . $candidate->party_symbol;
+            //                 $vote_url= base_url() . "home/cast/$candidate->candidate_id/$voter->voter_id";
+            //                 echo "<tr><td><a href='$vote_url' ><strong>$candidate->candidate_name</strong><br/><img  src='$photosrc' /></a></td>"
+            //                 ."<td><strong>$candidate->party_initials<strong><br/><img  src='$party_symbol'/></td></tr>";
+            //             }
+            //             ?>
+
+            <!--        </table> -->
                     <?php
                 }
-            }
+           
             ?>
+            <form action="<?php echo base_url().'home/vote_submit/'.$voter->voter_id ?>" method="POST" role="form">
+    
+    <div class="row-fluid">
+            
+    <?php
+      foreach ($positions as $position) {
+                        # code...
+                   ?>
+                    <legend><?php echo $position->position_name ?></legend>
+                    <hr/>
+                   <?php 
+        foreach ($candidates as $candidate) { 
+            if($candidate->position_id == $position->position_id ){
+            $photosrc = base_url() . 'uploads/' . $candidate->candidate_photo;
+            $party_symbol = base_url() . 'uploads/' . $candidate->party_symbol;
+            $vote_url= base_url() . "home/cast/$candidate->candidate_id/$voter->voter_id";
+    ?>
+    
+    
+<div class="checkbox candidate col-md-4 span3">
+    <label>
+    <img src="<?php echo $photosrc ?>" alt="<?php echo $candidate->candidate_name ?>" style="width: 200px;    height: 200px;    border-radius: 50%;">
+       <h3> <input type="checkbox" value="<?php echo $candidate->candidate_id ?>" name="<?php echo 'position-'.$candidate->position_id ?>[]" class="candidate-select <?php echo 'position-'.$candidate->position_id ?>">
+        <?php echo $candidate->candidate_name ?></h3>
+        <h5><img  src='<?php echo $party_symbol ?>' style="width:30px"/> <?php echo $candidate->party_initials ?></h5>
+    </label>
+</div>
 
+<?php
+}
+ }
+}
+?>
+</div>
+    <div class="row">
+        <hr/>
+    
+<div class="span12 ">
+    
+
+    <button type="submit" class="btn btn-success btn-large center">Submit Votes</button>
+    </div>
+    </div>
+</form>
+<?php
+    }
+?>
         </div>
+        <script type="text/javascript">
+            $('input.candidate-select').on('change', function() {
+
+ var currentClasses= $(this).attr('class');
+ var positionClass= currentClasses.replace('candidate-select','').trim(); 
+  $('input.candidate-select.'+positionClass).closest('.candidate').removeClass('checked');
+    $('input.candidate-select.'+positionClass).not(this).prop('checked', false);
+$(this).closest('.candidate').addClass('checked'); 
+});
+        </script>
+
     </body>
 </html>

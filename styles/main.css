@@ -77,3 +77,6 @@
         font-size: 80%;
       }
 .page-header{margin-top: 50px}
+.checkbox.checked {
+    background-color: #51a351;
+}

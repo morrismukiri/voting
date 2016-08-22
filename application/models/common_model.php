@@ -29,6 +29,7 @@ class common_model extends CI_Model {
     function getcandidates($candidate_id = -1, $party_id = -1) {
         $this->db->select('*')
                 ->from('candidates')
+                ->join('electoral_positions', 'candidates.electoral_position_id=electoral_positions.position_id')
                 ->join('parties', 'candidates.party_id=parties.party_id');
         if ($candidate_id != -1) {
             $this->db->where('candidates.candidate_id', $candidate_id);
@@ -37,6 +38,8 @@ class common_model extends CI_Model {
             $this->db->where('candidates.party_id', $party_id);
         }
         $query = $this->db->get();
+        
+    
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {
@@ -45,11 +48,13 @@ class common_model extends CI_Model {
     }
 
     function get_votes() {
-        $this->db->select('COUNT(*) AS votes_count,candidates.*')->from('votes')
+        $this->db->select('COUNT(*) AS votes_count,candidates.*,votes.position_id')->from('votes')
                 ->join('candidates', 'candidates.candidate_id=votes.candidate_id')
+                // ->join('electoral_positions', 'electoral_positions.position_id=votes.candidate_id')
                 ->group_by('votes.candidate_id');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
+
             return $query->result();
         } else {
             return NULL;
@@ -81,6 +86,19 @@ class common_model extends CI_Model {
             $out.= "Oops, No messages were sent. ErrorMessage: " . $gateway->getErrorMessage();
         }
         return $out;
+    }
+    public function hasVoted($voter_id,$position_id=-1)
+    {
+        $query = $this->db->where('voter_id', $voter_id);
+        
+        if($position_id!=-1) {
+            $query->where('position_id',$position_id);
+        }
+        
+
+       $results=  $query->get('votes');
+       return $results->num_rows() > 0 ;
+        
     }
 
 }

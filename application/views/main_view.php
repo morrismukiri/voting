@@ -11,6 +11,7 @@
             <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
         <?php endforeach; ?>
         <link type="text/css" rel="stylesheet" href="<?php echo base_url() . 'styles/bootstrap-fileupload.min.css'; ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.theme.min.css" />
         <script type="text/javascript" src="<?php echo base_url() . 'scripts/bootstrap-fileupload.min.js'; ?>"></script>
         <?php foreach ($js_files as $file): ?>
             <script src="<?php echo $file; ?>"></script>
@@ -50,11 +51,11 @@
             ?>
             <?php echo $output; ?>
             
-      <div id="push"></div>
+      <!-- <div id="push"></div> -->
         </div>
-        <div id="footer">
+        <div id="f0ooter">
       <div class="container">
-        <p class="muted credit">Developed by <a href="#">Sheila Murithi</a>.</p>
+        <p class="muted credit">Developed by <a href="#">Me</a>.</p>
       </div>
     </div>
 

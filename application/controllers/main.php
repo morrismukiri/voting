@@ -55,7 +55,7 @@ class main extends CI_Controller {
         $crud->set_subject('position');
         $crud->set_table('electoral_positions');
         $crud->set_primary_key('position_id');
-        // $crud->set_field_upload('party_symbol', 'uploads');
+        
         $crud->unset_columns('position_id');
         $crud->unset_fields('position_id');
         $output = $crud->render();

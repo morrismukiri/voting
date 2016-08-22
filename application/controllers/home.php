@@ -18,6 +18,10 @@ class home extends CI_Controller {
     public function index() {
         //if($this->flexi_auth->is_logged_in()){
        $data['votes'] =$this->common_model->get_votes();
+       //   header('Content-Type: application/json');
+       // echo json_encode($data['votes']);
+       // die();
+       $data['positions']=$this->common_model->get_all_records('electoral_positions');
         $this->load->view('home_view',$data);
 //        }  else {
 //            redirect('user/login','refresh');
@@ -57,6 +61,7 @@ class home extends CI_Controller {
                 $voter = $this->common_model->find_in_db('voters', 'phone', $num);
                 $data['voter']=$voter[0];
                 $data['candidates']=  $this->common_model->getcandidates();
+                $data['positions']=$this->common_model->get_all_records('electoral_positions');
                 $this->load->view('vote_view',$data );
             }  else {
              $this->load->view('confirm_vote_view');    
@@ -80,6 +85,35 @@ class home extends CI_Controller {
         } else {
             return TRUE;
         }
+    }
+    function vote_submit($voter_id)
+    {
+        $positions=$this->common_model->get_all_records('electoral_positions');
+        $selected_candidates = array();
+        foreach ($positions as $position) { 
+            // var_dump($position);
+            $selected_candidates[$position->position_id]=$this->input->post('position-'.$position->position_id);
+        }
+        $data=[];
+        foreach ($selected_candidates as $position_id => $candidate_id) {
+           if($candidate_id[0] && !$this->common_model->hasVoted($voter_id,$position_id)){
+            $data=array(
+                'voter_id'=>$voter_id,
+                'candidate_id'=>$candidate_id[0],
+                'position_id'=>$position_id
+
+            );
+            $this->common_model->insert_data('votes', $data);
+            // echo "Voter ".$voter_id . " Voted for ".$candidate_id[0] . " at position ". $position_id."<br/>";
+            }
+        }
+        //  header('Content-Type: application/json');
+        // echo json_encode($data);
+        // die();
+         
+       
+          $in['hasvoted']=TRUE;
+        $this->load->view('vote_view',$in);
     }
 
     function assert_confirmation($code) {

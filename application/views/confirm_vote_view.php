@@ -9,6 +9,7 @@
         <title><?php echo isset($title) ? $title : 'Confirm Voter' ?><?php echo isset($name) ? ' : ' . $name : '' ?></title>
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/bootstrap.theme.min.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>styles/main.css" />
         <link href='//fonts.googleapis.com/css?family=Roboto:400,300,400italic,500,700,100' rel='stylesheet' type='text/css'>
         <link href='//fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
