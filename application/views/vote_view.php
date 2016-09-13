@@ -65,27 +65,8 @@
             </div>
             <?php
             if (isset($hasvoted) && $hasvoted) {
-                echo '<h2>Congratulations! Your vote has been counted</h2>';
+                echo '<h2>Congratulations! You have voted for all the candidates</h2>';
             } else {
-                if (isset($candidates) && $candidates <> NULL) {
-
-                    ?>
-        <!-- <table class="table table-bordered">
-                        <tr><th>Name</th><th>Party</th></tr>
-                        -->
-                         <?php
-            //                   foreach ($candidates as $candidate) {
-            //                 $photosrc = base_url() . 'uploads/' . $candidate->candidate_photo;
-            //                 $party_symbol = base_url() . 'uploads/' . $candidate->party_symbol;
-            //                 $vote_url= base_url() . "home/cast/$candidate->candidate_id/$voter->voter_id";
-            //                 echo "<tr><td><a href='$vote_url' ><strong>$candidate->candidate_name</strong><br/><img  src='$photosrc' /></a></td>"
-            //                 ."<td><strong>$candidate->party_initials<strong><br/><img  src='$party_symbol'/></td></tr>";
-            //             }
-            //             ?>
-
-            <!--        </table> -->
-                    <?php
-                }
            
             ?>
             <form action="<?php echo base_url().'home/vote_submit/'.$voter->voter_id ?>" method="POST" role="form">
@@ -94,6 +75,7 @@
             
     <?php
       foreach ($positions as $position) {
+    if(!$this->common_model->hasVoted($voter->voter_id,$position->position_id)){//check whether the voter has voted for this position
                         # code...
                    ?>
                     <legend><?php echo $position->position_name ?></legend>
@@ -120,6 +102,7 @@
 }
  }
 }
+}
 ?>
 </div>
     <div class="row">
@@ -145,6 +128,10 @@
     $('input.candidate-select.'+positionClass).not(this).prop('checked', false);
 $(this).closest('.candidate').addClass('checked'); 
 });
+            setTimeout(function(){
+window.location='<?php echo base_url() ?>home';
+console.log('redirected')
+},180000);
         </script>
 
     </body>

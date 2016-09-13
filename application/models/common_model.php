@@ -100,6 +100,34 @@ class common_model extends CI_Model {
        return $results->num_rows() > 0 ;
         
     }
+    public function hasVotedForAll($voter_id)
+    {
+        // Get number count of all candidates
+        $candidates_count=  $this->db->get('electoral_positions')->num_rows();
+        
+        //Check how many votes we have for this voter(each candidate is a vote)
+        $times_voted = $this->db->where('voter_id', $voter_id)->get('votes')->num_rows();
+        
+        
+       return $candidates_count==$times_voted;
+        
+    }
+    public function getVotersWhoVoted()
+    {
+        $this->db->select('*')
+                ->from('votes')
+                ->join('electoral_positions', 'votes.position_id=electoral_positions.position_id')
+                ->join('voters', 'votes.voter_id=voters.voter_id')
+                ->group_by('voters.voter_id');
+        $query = $this->db->get();
+        
+    
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return NULL;
+        }
+    }
 
 }
 

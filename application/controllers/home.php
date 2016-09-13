@@ -34,30 +34,29 @@ class home extends CI_Controller {
             'candidate_id'=>$candidate_id
         );
         $this->common_model->insert_data('votes', $data);
-        $in['hasvoted']=TRUE;
+        $in['hasvoted']=$this->common_model->hasVotedForAll($voter->voter_id);
         $this->load->view('vote_view',$in);
     }
 
     function vote($confirm = '') {
+        $this->form_validation->set_rules('phone', 'Phone No.', 'required|trim|callback_number_check');//phone number validation rules
 
-        if ($this->input->post('phone') && !$this->input->post('confirmationcode') && $confirm !== '') {//Do Confirmation
-            $this->form_validation->set_rules('phone', 'Phone No.', 'required|trim|callback_number_check');
-            if ($this->form_validation->run()) {
-//                $voter = $this->common_model->find_in_db('voters', 'phone', $this->input->post('phone'));
-                $randomcode = $this->generateRandomString(5);
+        if ($this->input->post('phone') && !$this->input->post('confirmationcode') && $confirm !== '') {//user just entered the phone number to receive confirmation code
+            
+            if ($this->form_validation->run()) {//check whether valid phone number
+                $randomcode = $this->generateRandomString(5);//generete a random code
                 $updata = array(
                     'confirmation_code' => $randomcode
                 );
-                $this->common_model->update_record('voters', $updata, 'phone', set_value('phone'));
-                $this->common_model->send_sms(set_value('phone'), 'your confirmation code to vote is: ' . $randomcode);
+                $this->common_model->update_record('voters', $updata, 'phone', set_value('phone'));//save the code in the db
+                // $this->common_model->send_sms(set_value('phone'), 'your confirmation code to vote is: ' . $randomcode);// send the code to the user by sms
             }  
              $this->load->view('confirm_vote_view');    
             
-        } elseif ($this->input->post('phone') && $this->input->post('confirmationcode')) {
-           $this->form_validation->set_rules('phone', 'Phone No.', 'required|trim|callback_number_check');
-            $this->form_validation->set_rules('confirmationcode', 'Confirmation Code', 'required|trim|callback_assert_confirmation');
-            if ($this->form_validation->run()) {
-                $num=$this->input->post('phone');
+        } elseif ($this->input->post('phone') && $this->input->post('confirmationcode')) {//user entered the validation code
+            $this->form_validation->set_rules('confirmationcode', 'Confirmation Code', 'required|trim|callback_assert_confirmation');//add confirmation code validation rule
+            if ($this->form_validation->run()) {//check whether valid confirmation code
+                $num=$this->input->post('phone');//
                 $voter = $this->common_model->find_in_db('voters', 'phone', $num);
                 $data['voter']=$voter[0];
                 $data['candidates']=  $this->common_model->getcandidates();
@@ -76,11 +75,12 @@ class home extends CI_Controller {
     function number_check($num) {
         $this->load->model('common_model');
         $voter = $this->common_model->find_in_db('voters', 'phone', $num);
+        $voter= $voter[0];
         if ($voter === FALSE) {
             $this->form_validation->set_message('number_check', 'This number is not registered to vote');
             return FALSE;
-        } elseif ($this->common_model->find_in_db('votes', 'voter_id', $voter[0]->voter_id)) {
-            $this->form_validation->set_message('number_check', 'Sorry, You can only vote once');
+        } elseif ($this->common_model->hasVotedForAll($voter->voter_id)) {
+            $this->form_validation->set_message('number_check', 'Sorry, You have already voted for all positions ');
             return FALSE;
         } else {
             return TRUE;
@@ -88,14 +88,23 @@ class home extends CI_Controller {
     }
     function vote_submit($voter_id)
     {
+        //get all electoral positions
         $positions=$this->common_model->get_all_records('electoral_positions');
+        //initialize the candidates picked
         $selected_candidates = array();
+        /**loop over all the electoral positions
+         then... to the candidates picked array, add the position id of the current electoral position
+            as index and the candidate picked as the value 
+            i.e $selected_candidates[electoral_positions]=$selected_candidate from the form.
+            if the voter has not picked a candidate for the electoral position, it will be false **/
         foreach ($positions as $position) { 
-            // var_dump($position);
             $selected_candidates[$position->position_id]=$this->input->post('position-'.$position->position_id);
         }
+
         $data=[];
+        //loop through the selected candidates, checking if  the voter has voted for the position and save who they voted for
         foreach ($selected_candidates as $position_id => $candidate_id) {
+            //check whether the current position is voted for in the form and the database
            if($candidate_id[0] && !$this->common_model->hasVoted($voter_id,$position_id)){
             $data=array(
                 'voter_id'=>$voter_id,
@@ -104,16 +113,16 @@ class home extends CI_Controller {
 
             );
             $this->common_model->insert_data('votes', $data);
-            // echo "Voter ".$voter_id . " Voted for ".$candidate_id[0] . " at position ". $position_id."<br/>";
+            
             }
         }
-        //  header('Content-Type: application/json');
-        // echo json_encode($data);
-        // die();
-         
-       
-          $in['hasvoted']=TRUE;
-        $this->load->view('vote_view',$in);
+        $num=$this->input->post('phone');//
+                $voter = $this->common_model->find_in_db('voters', 'voter_id', $voter_id);
+                $data['voter']=$voter[0];
+                $data['candidates']=  $this->common_model->getcandidates();
+                $data['positions']=$this->common_model->get_all_records('electoral_positions');
+          $data['hasvoted']=$this->common_model->hasVotedForAll($voter_id);
+        $this->load->view('vote_view',$data);
     }
 
     function assert_confirmation($code) {
@@ -138,8 +147,11 @@ class home extends CI_Controller {
         }
         return $randomString;
     }
+    public function voters_who_voted()
+    {
+        $voters_voted= $this->common_model->getVotersWhoVoted();
+         header('Content-Type: application/json');
+         echo json_encode($voters_voted);
+    }
 
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
