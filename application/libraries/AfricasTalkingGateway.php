@@ -35,11 +35,11 @@ class AfricasTalkingGateway
   const HTTP_CODE_OK      = 200;
   const HTTP_CODE_CREATED = 201;
   
-  public function __construct($username_="morrismukiri", $apiKey_ = "7fc06e4ae63d1f55b29b91325f520d54aaec08798d2cdcdb5e7ea435c72a4262", $environment_ = "production")
+  public function __construct($gatewayAccount, $environment_ = "production")
   {
-
-    $this->_username     = $username_;
-    $this->_apiKey       = $apiKey_;
+    
+    $this->_username     = $gatewayAccount['username'];
+    $this->_apiKey       = $gatewayAccount['apiKey_'];
 
     $this->_environment  = $environment_;
     
