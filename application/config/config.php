@@ -358,7 +358,7 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 $config['sms_username'] = 'morrismukiri';//Your Africastalking username
-$config['sms_key'] = '7fc06e4ae63d1f55b29b91325f520d54aaec08798d2cdcdb5e7ea435c72a4262';//your Africastalking API Key. Makesure not to share the real key
+$config['sms_key'] = 'be1d0be97637fd67a32bea73b230fffe648375f8874716dd87aca83fae7f158a';//your Africastalking API Key. Makesure not to share the real key
 
 
 

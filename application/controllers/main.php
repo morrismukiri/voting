@@ -26,12 +26,12 @@ class main extends CI_Controller {
 
     function voters() {
         $crud = new grocery_CRUD();
-        $crud->set_theme('twitter-bootstrap');
-        $crud->set_subject('Voter');
+        // $crud->set_theme('twitter-bootstrap');
+        // $crud->set_subject('Voter');
         $crud->set_table('voters');
-        $crud->unique_fields('phone','national_id');
-        $crud->unset_fields('confirmation_code');
-        $crud->unset_columns('confirmation_code');
+        // $crud->unique_fields('phone','national_id');
+        // $crud->unset_fields('confirmation_code');
+        // $crud->unset_columns('confirmation_code');
 
         $output = $crud->render();
         $this->load->view('main_view', $output);
