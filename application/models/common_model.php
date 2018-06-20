@@ -48,7 +48,7 @@ class common_model extends CI_Model {
     }
 
     function get_votes() {
-        $this->db->select('COUNT(*) AS votes_count,candidates.*,votes.position_id')->from('votes')
+        $this->db->select('COUNT(*) AS votes_count,candidates.*,votes.position_id,votes.candidate_id')->from('votes')
                 ->join('candidates', 'candidates.candidate_id=votes.candidate_id')
                 // ->join('electoral_positions', 'electoral_positions.position_id=votes.candidate_id')
                 ->group_by('votes.candidate_id');
